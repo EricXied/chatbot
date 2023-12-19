@@ -25,11 +25,9 @@ model.eval()
 bot_name = "Sam"
 print("Let's chat! type 'quit' to exit")
 
-while True:
-    sentence = input("You: ")
-    if sentence == 'quit':
-        break
-    sentence = tokenize(sentence)
+
+def get_response(msg):
+    sentence = tokenize(msg)
     X = bag_of_words(sentence, all_words)
     X = X.reshape(1, X.shape[0])
     X = torch.from_numpy(X)
@@ -44,7 +42,18 @@ while True:
 
         for intent in intents['intents']:
             if tag == intent['tag']:
-                print(f"{bot_name}: {random.choice(intent['responses'])}")
+                return random.choice(intent['responses'])
 
     else:
-        print(f"{bot_name}: I do not understand...")
+        return "I do not understand..."
+
+
+if __name__ == '__main__':
+    print("Let's chat! (type 'quit' to exit)")
+    while True:
+        msg = input("You: ")
+        get_response(msg)
+        if msg == 'quit':
+            break
+        resp = get_response(msg)
+        print(resp)
